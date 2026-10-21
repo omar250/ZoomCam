@@ -9,6 +9,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Prepare ESRGAN model
+        continue-on-error: true
+        run: |
+          mkdir -p app/src/main/assets
+          pip install tensorflow==2.15.0 tensorflow-hub==0.16.1
+          python - <<'PY'
+          import tensorflow as tf, tensorflow_hub as hub
+          model = hub.load("https://tfhub.dev/captain-pool/esrgan-tf2/1")
+          cf = model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
+          @tf.function(input_signature=[tf.TensorSpec(shape=[1, 50, 50, 3], dtype=tf.float32)])
+          def f(x):
+              return cf(x)
+          conv = tf.lite.TFLiteConverter.from_concrete_functions([f.get_concrete_function()], model)
+          conv.optimizations = [tf.lite.Optimize.DEFAULT]
+          open("app/src/main/assets/esrgan.tflite", "wb").write(conv.convert())
+          PY
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
