@@ -9,10 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/zoomLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="48dp"
+        android:background="#99000000"
+        android:padding="8dp"
+        android:text="×1.0"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="#99000000"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -26,29 +39,71 @@
             android:id="@+id/captureBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="التقاط + تحسين" />
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#FF6D00"
+            android:padding="14dp"
+            android:text="التقاط + تحسين"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/resultPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EE000000"
+        android:background="#F2000000"
         android:orientation="vertical"
         android:padding="12dp"
         android:visibility="gone">
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="قبل" android:textColor="#FFFFFF" />
-        <ImageView android:id="@+id/beforeImg" android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_weight="1" android:scaleType="fitCenter" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="قبل (تكبير عادي)"
+            android:textColor="#BBBBBB" />
+        <ImageView
+            android:id="@+id/beforeImg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="بعد" android:textColor="#FFFFFF" />
-        <ImageView android:id="@+id/afterImg" android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_weight="1" android:scaleType="fitCenter" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="بعد (ذكاء اصطناعي)"
+            android:textColor="#FF6D00" />
+        <ImageView
+            android:id="@+id/afterImg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
-        <Button android:id="@+id/closeBtn" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="إغلاق" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#FF6D00"
+                android:text="حفظ في المعرض"
+                android:textColor="#FFFFFF" />
+            <Button
+                android:id="@+id/closeBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#555555"
+                android:text="إغلاق"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
