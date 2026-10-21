@@ -100,9 +100,10 @@ class MainActivity : AppCompatActivity() {
                     val m = Matrix().apply { postRotate(rotation.toFloat()) }
                     bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, m, true)
                 }
+                val basicImg = sr.basic(bmp)
                 val enhanced = sr.enhance(bmp)
                 runOnUiThread {
-                    beforeImg.setImageBitmap(sr.basic(bmp))،
+                    beforeImg.setImageBitmap(basicImg)
                     afterImg.setImageBitmap(enhanced)
                     resultPanel.visibility = View.VISIBLE
                     captureBtn.isEnabled = true
