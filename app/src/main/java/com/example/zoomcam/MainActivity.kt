@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private val executor = Executors.newSingleThreadExecutor()
     private lateinit var sr: SuperResolution
+    private val btnText = "التقاط + تحسين"
 
     private val permission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     private fun capture() {
         val ic = imageCapture ?: return
         captureBtn.isEnabled = false
+        captureBtn.text = "جارٍ الالتقاط..."
         ic.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
                 val rotation = image.imageInfo.rotationDegrees
@@ -101,17 +103,21 @@ class MainActivity : AppCompatActivity() {
                     bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, m, true)
                 }
                 val basicImg = sr.basic(bmp)
-                val enhanced = sr.enhance(bmp)
+                val enhanced = sr.enhanceFull(bmp) { done, total ->
+                    runOnUiThread { captureBtn.text = "جارٍ المعالجة $done/$total" }
+                }
                 runOnUiThread {
                     beforeImg.setImageBitmap(basicImg)
                     afterImg.setImageBitmap(enhanced)
                     resultPanel.visibility = View.VISIBLE
+                    captureBtn.text = btnText
                     captureBtn.isEnabled = true
                 }
             }
             override fun onError(e: ImageCaptureException) {
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "فشل الالتقاط", Toast.LENGTH_SHORT).show()
+                    captureBtn.text = btnText
                     captureBtn.isEnabled = true
                 }
             }
