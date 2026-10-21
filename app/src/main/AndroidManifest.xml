@@ -5,7 +5,8 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <application
-        android:label="ZoomCam"
+        android:icon="@drawable/ic_launcher"
+        android:label="ZoomCam AI"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
