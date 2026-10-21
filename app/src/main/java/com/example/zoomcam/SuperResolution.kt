@@ -13,6 +13,10 @@ class SuperResolution(private val context: Context) {
     private var interpreter: Interpreter? = null
     val hasModel: Boolean get() = interpreter != null
 
+    private val tiles = 4
+    private val inSize = 50
+    private val outSize = 200
+
     init {
         try {
             interpreter = Interpreter(loadModel("esrgan.tflite"))
@@ -28,17 +32,24 @@ class SuperResolution(private val context: Context) {
         }
     }
 
+    // مربع من منتصف الصورة بدقتها الأصلية (بحد أقصى 200x200 بكسل)
+    private fun centerCrop(src: Bitmap): Bitmap {
+        val side = minOf(src.width, src.height, inSize * tiles)
+        return Bitmap.createBitmap(
+            src, (src.width - side) / 2, (src.height - side) / 2, side, side
+        )
+    }
+
+    // تكبير عادي لنفس المنطقة (للمقارنة)
+    fun basic(src: Bitmap): Bitmap {
+        return Bitmap.createScaledBitmap(centerCrop(src), outSize * tiles, outSize * tiles, true)
+    }
+
+    // تكبير بالذكاء الاصطناعي
     fun enhance(src: Bitmap): Bitmap {
-        val side = minOf(src.width, src.height)
-        val square = Bitmap.createBitmap(src, (src.width - side) / 2, (src.height - side) / 2, side, side)
+        val small = Bitmap.createScaledBitmap(centerCrop(src), inSize * tiles, inSize * tiles, true)
 
-        val tiles = 4
-        val inSize = 50
-        val outSize = 200
-        val small = Bitmap.createScaledBitmap(square, inSize * tiles, inSize * tiles, true)
-
-        val itp = interpreter
-            ?: return Bitmap.createScaledBitmap(small, outSize * tiles, outSize * tiles, true)
+        val itp = interpreter ?: return basic(src)
 
         val result = Bitmap.createBitmap(outSize * tiles, outSize * tiles, Bitmap.Config.ARGB_8888)
         val input = Array(1) { Array(inSize) { Array(inSize) { FloatArray(3) } } }
