@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 val enhanced = sr.enhance(bmp)
                 runOnUiThread {
-                    beforeImg.setImageBitmap(bmp)
+                    beforeImg.setImageBitmap(sr.basic(bmp))،
                     afterImg.setImageBitmap(enhanced)
                     resultPanel.visibility = View.VISIBLE
                     captureBtn.isEnabled = true
